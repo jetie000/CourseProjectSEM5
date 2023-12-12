@@ -1,0 +1,77 @@
+@import '@/variables.scss';
+
+@media (max-width: $media-lg-2) {
+
+    .product-product> :first-child {
+        &>div>span {
+            font-size: 32px !important; //to override bootstrap style
+        }
+
+        &>div>div>div>span {
+            font-size: 21px !important; //to override bootstrap style
+        }
+    }
+}
+
+@media (max-width: $media-lg-1) {
+
+    .product-product> :first-child>div {
+        padding-left: 25px !important; //to override bootstrap style
+
+        &>hr {
+            display: none;
+        }
+    }
+
+    .product-info>div {
+        width: 100% !important; //to override bootstrap style
+    }
+
+}
+
+@media (max-width: $media-md-2) {
+
+    .product-product> :first-child {
+        &>div>span {
+            font-size: 24px !important; //to override bootstrap style
+        }
+
+        &>div>div>div>span {
+            font-size: 18px !important; //to override bootstrap style
+        }
+    }
+}
+
+@media (max-width: $media-md-1) {
+
+    .product-product> :first-child {
+        flex-direction: column-reverse !important; //to override bootstrap style
+        gap: 20px !important; //to override bootstrap style
+
+        &>div {
+            padding-left: 0px !important; //to override bootstrap style
+
+            &>hr {
+                display: block !important; //to override bootstrap style
+            }
+        }
+
+        &>* {
+            width: 100% !important; //to override bootstrap style
+        }
+    }
+
+    .product-product>.product-buttons>button {
+        font-size: 18px !important; //to override bootstrap style
+    }
+}
+
+@media (max-width: $media-sm-2) {
+    .product-product > h2{
+        font-size: 20px;
+    }
+
+    .product-info>div{
+        font-size: 16px !important; //to override bootstrap style
+    }
+}

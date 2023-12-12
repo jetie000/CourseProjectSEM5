@@ -1,0 +1,15 @@
+@import '@/variables.scss';
+
+@media (max-width: $media-lg-2) {
+
+    .change-product-wrapper{
+        width: 75% !important; //to override bootstrap style
+    }
+}
+
+@media (max-width: $media-md-1) {
+    
+    .change-product-wrapper{
+        width: 100% !important; //to override bootstrap style
+    }
+}

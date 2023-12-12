@@ -1,0 +1,26 @@
+@import '@/variables.scss';
+
+@media (max-width: $media-sm-2) {
+    .admin-menu-inputs{
+        flex-direction: column;
+        & > div {
+            width: 100% !important;
+        }
+    }
+    .admin-menu-users > li div{
+        font-size: 16px !important; //to override bootstrap style
+    }
+}
+
+@media (max-width: $media-sm-1) {
+    .admin-menu-users > li > div > div{
+        flex-direction: column;
+        gap: 0px !important;
+        & > .vr{
+            display: none;
+        }
+        & > *{
+            width: 100% !important;
+        }
+    }
+}

@@ -1,0 +1,13 @@
+@import '@/variables.scss';
+
+@media (max-width: $media-sm-2) {
+    .categories-list > :last-child{
+        flex-direction: column;
+    }
+    .categories-inputs{
+        flex-direction: column;
+        & > div {
+            width: 100% !important;
+        }
+    }
+}

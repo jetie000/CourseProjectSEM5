@@ -1,0 +1,21 @@
+@import '@/variables.scss';
+
+.dropdown-toggle::after {
+    color: white !important;
+}
+
+@media (min-width: 992px) {
+    nav .dropdown{
+        order: 3;
+    }
+}
+
+@media (max-width: $media-burger){
+    [data-bs-theme="light"] .offcanvas-body ul li span{
+        color: black;
+
+        &:hover{
+            color: rgb(87, 87, 87);
+        }
+    }
+}

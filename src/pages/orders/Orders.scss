@@ -1,0 +1,70 @@
+@import '@/variables.scss';
+
+.orders-th-empty {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
+.orders-table {
+
+    &>tbody>tr> :nth-child(2),
+    &>tbody>tr> :nth-child(3) {
+        max-width: 160px;
+    }
+
+    & th {
+        vertical-align: middle;
+    }
+}
+
+@media (max-width: $media-lg-2) {
+    .orders-table {
+        width: 100% !important; //to override bootstrap style  
+    }
+}
+
+@media (max-width: $media-md-2) {
+
+    .orders-table>tbody>tr {
+
+        &> :nth-child(2),
+        &> :nth-child(3) {
+
+            max-width: 120px;
+        }
+    }
+}
+
+
+@media (max-width: $media-md-1) {
+    .orders-table {
+        table-layout: fixed;
+
+        & thead tr {
+            display: flex;
+            flex-wrap: wrap;
+
+            & th {
+                text-align: center !important;
+                width: 100%;
+            }
+        }
+
+        & tbody tr {
+            display: flex;
+            flex-wrap: wrap;
+
+            &> :nth-child(2),
+            &> :nth-child(3) {
+
+                max-width: unset;
+            }
+
+            & th {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    }
+}

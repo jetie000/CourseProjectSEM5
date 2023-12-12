@@ -1,0 +1,72 @@
+@import '@/variables.scss';
+
+.input-group .btn {
+    z-index: 1;
+}
+
+.product-item {
+    height: 300px;
+}
+
+@media (max-width: $media-lg-2) {
+    .home-element {
+        width: 100% !important; //to override bootstrap style  
+    }
+}
+
+@media (max-width: $media-lg-1) {
+    .home-element {
+        width: 100% !important; //to override bootstrap style  
+    }
+
+    .product-item {
+        height: 200px;
+
+        &>div {
+            padding: 20px !important; //to override bootstrap style
+            &>div>div>span {
+                font-size: 16px !important; //to override bootstrap style
+            }
+        }
+    }
+}
+
+@media (max-width: $media-md-2) {
+
+    .product-item {
+        height: 170px;
+
+        &>div {
+            padding: 10px !important; //to override bootstrap style
+            &>span {
+                font-size: 22px !important; //to override bootstrap style
+            }
+        }
+    }
+}
+
+@media (max-width: $media-md-1) {
+
+    .product-item {
+        flex-direction: column;
+        height: auto;
+        & > img{
+            border-radius: 10px !important;
+        }
+        & >div{
+            width: 100% !important;
+            padding: 20px !important;
+            gap: 10px;
+        }
+    }
+}
+
+@media (max-width: $media-sm-1) {
+
+    .product-item {
+        & >div{
+            padding: 10px !important;
+            gap: 10px;
+        }
+    }
+}

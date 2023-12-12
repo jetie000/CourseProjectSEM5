@@ -1,0 +1,44 @@
+@import '@/variables.scss';
+
+.order-products-list{
+    height: 200px;
+}
+
+@media (max-width: $media-md-1) {
+    
+    .order-products-list{
+        flex-direction: column;
+        height: auto;
+
+        & > div{
+            width: 100% !important;
+        }
+    }
+}
+
+@media (max-width: $media-sm-2) {
+    
+    .order-order{
+        & > :first-child{
+            font-size: 16px !important;
+        }
+    }
+
+    .order-buttons > button{
+        font-size: 16px !important;
+    }
+
+    .order-products-list > div{
+        font-size: 16px !important;
+    }
+}
+
+
+@media (max-width: $media-sm-1) {
+    
+    .order-order{
+        & > :first-child{
+            font-size: 14px !important;
+        }
+    }
+}
