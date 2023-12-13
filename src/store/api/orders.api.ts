@@ -65,7 +65,13 @@ export const ordersApi = baseApi.injectEndpoints({
             }, {
                 type: 'Orders'
             }]
-        })
+        }),
+        downloadReport: builder.mutation<Blob, number>({
+            query: (days) => ({
+                url: '/order/getReport?days=' + days,
+                method: 'POST',
+            })
+        }),
     })
 })
 
@@ -75,4 +81,5 @@ export const {
     useAddOrderMutation,
     useChangeOrderMutation,
     useDeleteOrderMutation,
+    useDownloadReportMutation
 } = ordersApi

@@ -77,9 +77,10 @@ function OrderInfo({ data }: { data: IOrder }) {
                 <div className=' text-truncate' >Имя покупателя: {data.customerName}</div>
                 <div className=' text-truncate' >Телефон покупателя: {data.customerPhone}</div>
                 <hr />
+                <div>ID сотрудника: {data.employeeId}</div>
                 <div>Дата создания: {new Date(data.creationDate).toLocaleString()}</div>
                 <div>Статус заказа: {data.orderStatus}</div>
-                <div>ID сотрудника: {data.employeeId}</div>
+                <div>К оплате: {data.productOrders?.reduce((a, p) => a + p.finalPrice, 0)}р</div>
 
             </div>
             {
@@ -113,7 +114,7 @@ function OrderInfo({ data }: { data: IOrder }) {
                                     </div>
                                     <div className='d-flex flex-column overflow-x-hidden'>
                                         <span className='fw-light text-truncate'>{product.category}</span>
-                                        <span>{product.price}</span>
+                                    <span>{product.price + ' ( - ' + product.priceDiscount + 'р )'}</span>
                                         <span>{data.productOrders?.find(p => p.productId === product.id)?.quantity}</span>
                                     </div>
                                 </div>

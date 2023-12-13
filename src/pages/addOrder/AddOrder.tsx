@@ -95,7 +95,8 @@ function AddOrder() {
             setProductsOrders([...productsOrders,
             {
                 productId: product.id!,
-                quantity: 1
+                quantity: 1,
+                finalPrice: product.price - product.priceDiscount
             }]);
         setIsShow(false);
     }

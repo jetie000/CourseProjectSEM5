@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { useGetManyOrdersQuery } from "@/store/api/orders.api";
+import { useDownloadReportMutation, useGetManyOrdersQuery } from "@/store/api/orders.api";
 import './Orders.scss'
 import { variables } from "@/variables";
+import axios from "axios";
 
 function Orders() {
 
@@ -28,6 +29,25 @@ function Orders() {
             sortParam: sortParam
         }
     )
+
+    const downloadReport = (days: number) => {
+        axios({
+            url: variables.API_URL + '/order/getReport?days=' + days,
+            method: 'GET',
+            responseType: 'blob',
+            headers: {
+                "Authorization": "Bearer "+variables.GET_ACCESS_TOKEN()
+            }
+        }).then(response => {
+            const blob_file: Blob = response.data;
+            const file_url = URL.createObjectURL(blob_file);
+            const link = document.createElement('a');
+            let date = new Date().toLocaleString()
+            link.download = `${date+'-'+days+'-days'}.xlsx`;
+            link.href = file_url;
+            link.click();
+        });
+    }
 
     const sortOrdersClick = (param: string) => {
         if (sortParam === param) {
@@ -171,10 +191,11 @@ function Orders() {
                                     }
                                 </tbody>
                             </table>
-                            <button onClick={() => setProductsLimit(productsLimit + variables.PRODUCTS_SEARCH_ORDER)} className="btn btn-primary rounded-4">Показать еще</button>
+                            <button onClick={() => setProductsLimit(productsLimit + variables.PRODUCTS_SEARCH_ORDER)} className="btn btn-primary rounded-2">Показать еще</button>
                         </>
                         : <div>Заказы не найдены</div>)
                 }
+                <button onClick={() => downloadReport(5)} className="btn btn-primary align-self-end mt-5">Скачать отчет по заказам</button>
             </div>
         </div >
     );

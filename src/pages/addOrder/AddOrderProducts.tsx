@@ -13,8 +13,11 @@ function AddOrderProducts({ dataProducts, setProductsOrders, productsOrders }: {
         if (result > left)
             result = left;
         setProductsOrders(productsOrders.map(p => {
-            if (p.productId === idToFind)
+            if (p.productId === idToFind) {
+                let product = dataProducts.find(dp => dp.id === p.productId);
                 p.quantity = Number(result);
+                p.finalPrice = ((product?.price || 0) - (product?.priceDiscount || 0)) * Number(result);
+            }
             return p;
         }));
     }
@@ -27,8 +30,8 @@ function AddOrderProducts({ dataProducts, setProductsOrders, productsOrders }: {
     return (
         <div>
             {
-                dataProducts.map(product =>
-                    <div className='border rounded-4 add-order-products-list d-flex mb-2' key={product.id}>
+                dataProducts.map((product, index) =>
+                    <div className='border rounded-4 add-order-products-list d-flex mb-2' key={index}>
                         <img className='rounded-4 img-fluid' src={variables.PHOTOS_URL + product.photoPath} alt="ProductImg" />
                         <div className='d-flex flex-column p-2 ps-3 justify-content-around w-25 flex-fill'>
                             <span className='fs-4 text-truncate'>{product.name}</span>
@@ -37,11 +40,13 @@ function AddOrderProducts({ dataProducts, setProductsOrders, productsOrders }: {
                                     <span className='fw-light'>Категория </span>
                                     <span>Цена (р)</span>
                                     <span>Осталось</span>
+                                    <span>К оплате</span>
                                 </div>
                                 <div className='d-flex flex-column overflow-x-hidden'>
                                     <span className='fw-light text-truncate'>{product.category}</span>
-                                    <span>{product.price}</span>
+                                    <span>{product.price + ' ( - ' + product.priceDiscount + 'р )'}</span>
                                     <span>{product.quantityLeft}</span>
+                                    <span>{productsOrders.find(p => p.productId === product.id!)?.finalPrice}</span>
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between">
@@ -62,8 +67,10 @@ function AddOrderProducts({ dataProducts, setProductsOrders, productsOrders }: {
                             </div>
 
                         </div>
-                    </div>)
+                    </div>
+                )
             }
+            <h2 className='mt-3'>К оплате: {productsOrders.reduce((a, p) => a + p.finalPrice, 0)} р</h2>
         </div>
     );
 }

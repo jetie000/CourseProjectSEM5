@@ -16,8 +16,11 @@ function ChangeOrderProducts({ dataProducts, setProductsOrders, productsOrders, 
             result = left;
         setProductsOrders(productsOrders.map(p => {
             let productToChange = { ...p };
-            if (p.productId === idToFind)
+            if (p.productId === idToFind) {
+                let product = dataProducts.find(dp => dp.id === p.productId);
                 productToChange.quantity = Number(result);
+                productToChange.finalPrice = ((product?.price || 0) - (product?.priceDiscount || 0)) * Number(result);
+            }
             return productToChange;
         }));
     }
@@ -40,18 +43,20 @@ function ChangeOrderProducts({ dataProducts, setProductsOrders, productsOrders, 
                                     <span className='fw-light'>Категория </span>
                                     <span>Цена (р)</span>
                                     <span>Осталось</span>
+                                    <span>К оплате</span>
                                 </div>
                                 <div className='d-flex flex-column overflow-x-hidden'>
                                     <span className='fw-light text-truncate'>{product.category}</span>
-                                    <span>{product.price}</span>
+                                    <span>{product.price + ' ( - ' + product.priceDiscount + 'р )'}</span>
                                     <span>{product.quantityLeft}</span>
+                                    <span>{productsOrders.find(p => p.productId === product.id!)?.finalPrice}</span>
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between">
                                 <div className="d-flex flex-column me-2">
                                     <label htmlFor={"inputNum" + product.id!}>Количество</label>
                                     <input type='text'
-                                        onChange={(e) => handleChangeProdNum(e, product.id!, product.quantityLeft + ((dataOrder.productOrders || []).find(p => p.productId === product.id)?.quantity || 0) )}
+                                        onChange={(e) => handleChangeProdNum(e, product.id!, product.quantityLeft + ((dataOrder.productOrders || []).find(p => p.productId === product.id)?.quantity || 0))}
                                         className="form-control fs-6"
                                         id={"inputNum" + product.id!}
                                         placeholder="Введите количество"
@@ -63,10 +68,10 @@ function ChangeOrderProducts({ dataProducts, setProductsOrders, productsOrders, 
                                     </svg>
                                 </button>
                             </div>
-
                         </div>
                     </div>)
             }
+            <h2 className='mt-3'>К оплате: {productsOrders.reduce((a, p) => a + p.finalPrice, 0)} р</h2>
         </div>
     );
 }
