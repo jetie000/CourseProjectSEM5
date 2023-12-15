@@ -1,8 +1,8 @@
 import { IUser } from "./types/user.interface";
 
 export const variables = {
-    API_URL: 'https://localhost:7205/api',
-    PHOTOS_URL: "https://localhost:7205/photos/",
+    API_URL: 'https://jetie003-001-site1.gtempurl.com/api',
+    PHOTOS_URL: "https://jetie003-001-site1.gtempurl.com/photos/",
     USER_LOCALSTORAGE: "user_info",
     THEME_LOCALSTORAGE: "page_theme",
     MAX_COLLECTION_PHOTO_SIZE: 5000000,
