@@ -22,13 +22,15 @@ function AddProduct() {
     if (!user) {
         return <Navigate to={'/'} />;
     }
-    
+
     const [croppedImage, setCroppedImage] = useState<string | undefined>(undefined);
     const [fieldsType, setFieldsType] = useState<IProductFieldsType[]>([]);
     const [fields, setFields] = useState<IProductFields[]>([]);
     const [modalInfo, setModalInfo] = useState<IModalInfo>({ title: '', children: '' });
     const { setToastChildren } = useActions();
-
+    const [price, setPrice] = useState(0);
+    const [prodNum, setProdNum] = useState(0);
+    const [discount, setDiscount] = useState(0);
 
     const [addProduct, { isLoading, isSuccess, isError, error, data }] = useAddProductMutation();
     const [postProductImg, { isLoading: isLoadingImg, isSuccess: isSuccessImg, isError: isErrorImg, error: errorImg, data: dataImg }] = usePostProductPhotoMutation();
@@ -39,9 +41,6 @@ function AddProduct() {
             let inputName = (document.getElementById('inputName') as HTMLInputElement).value;
             let inputDesc = (document.getElementById('inputDesc') as HTMLInputElement).value;
             let inputCategory = (document.getElementById('inputCategory') as HTMLSelectElement).value;
-            let inputPrice = Number((document.getElementById('inputPrice') as HTMLInputElement).value);
-            let inputQuantityLeft = Number((document.getElementById('inputQuantityLeft') as HTMLInputElement).value);
-            let inputPriceDiscount = Number((document.getElementById('inputPriceDiscount') as HTMLInputElement).value);
             let inputManufacturer = (document.getElementById('inputManufacturer') as HTMLInputElement).value;
 
             addProduct({
@@ -51,10 +50,10 @@ function AddProduct() {
                 description: inputDesc !== '' ? inputDesc : undefined,
                 photoPath: dataImg || 'default.png',
                 creationDate: new Date(),
-                price: inputPrice,
-                quantityLeft: inputQuantityLeft,
+                price: price,
+                quantityLeft: prodNum,
                 quantitySold: 0,
-                priceDiscount: inputPriceDiscount,
+                priceDiscount: discount,
                 manufacturer: inputManufacturer,
                 productFields: fields
             })
@@ -80,22 +79,15 @@ function AddProduct() {
     }, [isLoading])
 
     const addProductClick = async () => {
-        console.log(fields);
         let inputName = (document.getElementById('inputName') as HTMLInputElement).value;
         let inputDesc = (document.getElementById('inputDesc') as HTMLInputElement).value;
         let inputCategory = (document.getElementById('inputCategory') as HTMLSelectElement).value;
-        let inputPrice = Number((document.getElementById('inputPrice') as HTMLInputElement).value);
-        let inputQuantityLeft = Number((document.getElementById('inputQuantityLeft') as HTMLInputElement).value);
-        let inputPriceDiscount = Number((document.getElementById('inputPriceDiscount') as HTMLInputElement).value);
         let inputManufacturer = (document.getElementById('inputManufacturer') as HTMLInputElement).value;
         if (inputName.trim() === '' ||
             inputManufacturer.trim() === '' ||
             fields.some(field => field.fieldName.trim() === '') ||
             inputCategory.trim() === '' ||
-            inputPrice <= 0 ||
-            inputQuantityLeft < 0 ||
-            inputPriceDiscount < 0 ||
-            inputPriceDiscount >= 100) {
+            price <= 0 || prodNum < 0 || discount < 0 || discount >= 100) {
             const myModal = bootstrapModal.getOrCreateInstance(document.getElementById('addProductModal') || 'addProductModal');
             setModalInfo({ title: "Ошибка", children: 'Введите данные' })
             myModal.show();
@@ -115,10 +107,10 @@ function AddProduct() {
                 description: inputDesc !== '' ? inputDesc : undefined,
                 photoPath: dataImg || 'default.png',
                 creationDate: new Date(),
-                price: inputPrice,
-                quantityLeft: inputQuantityLeft,
+                price: price,
+                quantityLeft: prodNum,
                 quantitySold: 0,
-                priceDiscount: inputPriceDiscount,
+                priceDiscount: discount,
                 manufacturer: inputManufacturer,
                 productFields: fields
             })
@@ -154,11 +146,26 @@ function AddProduct() {
                         }
                     </select>
                     <label className="mb-1 fs-5" htmlFor="inputPrice">Цена товара (р)</label>
-                    <input type='number' className="form-control fs-6 mb-3" id="inputPrice" defaultValue={0} placeholder="Введите цену товара" />
+                    <input type='text'
+                        className="form-control fs-6 mb-3"
+                        id="inputPrice"
+                        value={price}
+                        placeholder="Введите цену товара"
+                        onChange={(e) => setPrice(Number(e.target.value.replace(/\D/g, '')))} />
                     <label className="mb-1 fs-5" htmlFor="inputQuantityLeft">Количество товара</label>
-                    <input type='number' className="form-control fs-6 mb-3" id="inputQuantityLeft" defaultValue={0} placeholder="Введите количество товара" />
+                    <input type='text'
+                        className="form-control fs-6 mb-3"
+                        id="inputQuantityLeft"
+                        value={prodNum}
+                        placeholder="Введите количество товара"
+                        onChange={(e) => setProdNum(Number(e.target.value.replace(/\D/g, '')))} />
                     <label className="mb-1 fs-5" htmlFor="inputPriceDiscount">Скидка на товар (%)</label>
-                    <input type='number' className="form-control fs-6 mb-3" id="inputPriceDiscount" defaultValue={0} placeholder="Введите скидку на товар" />
+                    <input type='text'
+                        className="form-control fs-6 mb-3"
+                        id="inputPriceDiscount"
+                        value={discount}
+                        placeholder="Введите скидку на товар"
+                        onChange={(e) => setDiscount(Number(e.target.value.replace(/\D/g, '')))} />
                     <label className="mb-1 fs-5" htmlFor="inputManufacturer">Производитель товара</label>
                     <input className="form-control fs-6 mb-3" id="inputManufacturer" placeholder="Введите производителя товара" />
 

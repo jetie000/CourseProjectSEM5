@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { useAddOrderMutation } from '@/store/api/orders.api';
 import './AddOrder.scss'
 import { IProductOrder } from '@/types/productOrder';
-import { useChangeProductMutation, useChangeQuantityProductMutation, useGetByIdsQuery, useSearchProductsQuery } from '@/store/api/products.api';
+import { useChangeQuantityProductMutation, useGetByIdsQuery, useSearchProductsQuery } from '@/store/api/products.api';
 import { variables } from '@/variables';
 import AddOrderProducts from './AddOrderProducts';
 import { IProduct } from '@/types/product.interface';
@@ -21,7 +21,7 @@ function AddOrder() {
     const { user } = useSelector((state: RootState) => state.user);
 
     if (!user) {
-        navigate('/login');
+        return <Navigate to={'/login'}/>
     }
 
     const inputSearch = useRef<HTMLInputElement>(null);

@@ -4,7 +4,7 @@ import { IModalInfo } from "@/types/modalInfo.interface";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { Toast as bootstrapToast } from 'bootstrap'
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { ICategory } from "@/types/category.interface";
 import { useAddCategoryMutation, useChangeCategoryMutation, useDeleteCategoryMutation, useGetAllCategoriesQuery } from "@/store/api/category.api";
 import { useActions } from "@/hooks/useActions";
@@ -14,7 +14,7 @@ function Categories() {
     const navigate = useNavigate();
     const { user } = useSelector((state: RootState) => state.user);
     if (!user) {
-        navigate('/login');
+        return <Navigate to={'/login'}/>
     }
 
     const [currentCategory, setCurrentCategory] = useState<ICategory>();

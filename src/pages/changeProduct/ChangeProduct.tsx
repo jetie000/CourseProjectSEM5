@@ -22,7 +22,7 @@ function ChangeProduct() {
     let { id } = useParams();
     const { user } = useSelector((state: RootState) => state.user);
     if (!user) {
-        return <Navigate to={'/login'} />;
+        return <Navigate to={'/login'}/>
     }
     const { isLoading: isLoadingGet, isSuccess: isSuccessGet, isError: isErrorGet, error: errorGet, data: dataGet } = useGetOneQuery(Number(id))
     const [croppedImage, setCroppedImage] = useState<string | undefined>(undefined);

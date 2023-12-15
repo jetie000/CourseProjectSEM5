@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { Toast as bootstrapToast } from 'bootstrap';
 import { useActions } from "@/hooks/useActions";
 import { useGetOneQuery } from "@/store/api/products.api";
 import ProductInfo from "./ProductInfo";
 import './Product.scss'
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 function Product() {
+    const { user } = useSelector((state: RootState) => state.user);
+
+    if (!user) {
+        return <Navigate to={'/login'}/>
+    }
+    
     let { id } = useParams();
     const { isLoading, isError, data } = useGetOneQuery(Number(id))
     const { setToastChildren } = useActions();

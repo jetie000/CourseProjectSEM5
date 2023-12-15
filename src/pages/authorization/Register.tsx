@@ -13,13 +13,26 @@ function Register() {
         if (isSuccess) {
             if (data === 'User exists.')
                 setModalInfo({ title: "Ошибка", children: 'Пользователь с таким адресом эл. почты существует' })
-            else {
-                setModalInfo({ title: 'Успешно', children: 'Вы успешно зарегистрированы' });
-                (document.getElementById('inputName') as HTMLInputElement).value = '';
-                (document.getElementById('inputSurname') as HTMLInputElement).value = '';
-                (document.getElementById('inputEmail') as HTMLInputElement).value = '';
-                (document.getElementById('inputPassword') as HTMLInputElement).value = '';
-            }
+
+            else
+                if (data === 'Invalid password.')
+                    setModalInfo(
+                        {
+                            title: "Правила ввода пароля",
+                            children:
+                                <ul>
+                                    <li>от 8 до 30 символов</li>
+                                    <li>допустимы: латинские буквы, цифры, символы (!@#$%^&*_-+:.)</li>
+                                    <li>обязательно должны быть буквы верхнего и нижнего регистра</li>
+                                </ul>
+                        })
+                else {
+                    setModalInfo({ title: 'Успешно', children: 'Вы успешно зарегистрированы' });
+                    (document.getElementById('inputName') as HTMLInputElement).value = '';
+                    (document.getElementById('inputSurname') as HTMLInputElement).value = '';
+                    (document.getElementById('inputEmail') as HTMLInputElement).value = '';
+                    (document.getElementById('inputPassword') as HTMLInputElement).value = '';
+                }
         }
         if (isError) {
             setModalInfo({ title: "Ошибка", children: ((error as FetchBaseQueryError).data as string) })

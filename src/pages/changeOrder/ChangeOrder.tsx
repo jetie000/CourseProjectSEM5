@@ -21,7 +21,7 @@ function ChangeOrder() {
     const { user } = useSelector((state: RootState) => state.user);
 
     if (!user) {
-        navigate('/login');
+        return <Navigate to={'/login'}/>
     }
 
     const inputSearch = useRef<HTMLInputElement>(null);

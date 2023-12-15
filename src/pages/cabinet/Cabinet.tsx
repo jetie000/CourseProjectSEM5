@@ -11,14 +11,14 @@ import { IUser } from '@/types/user.interface';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import './Cabinet.scss'
 import { baseApi } from '@/store/api/baseApi';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function Cabinet() {
     const navigate = useNavigate();
     const { user } = useSelector((state: RootState) => state.user);
 
     if (!user) {
-        navigate('/login');
+        return <Navigate to={'/login'}/>
     }
 
     const dispatch = useDispatch();

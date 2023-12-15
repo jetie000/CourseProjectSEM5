@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useDownloadReportMutation, useGetManyOrdersQuery } from "@/store/api/orders.api";
@@ -13,13 +13,14 @@ function Orders() {
     const { user } = useSelector((state: RootState) => state.user);
 
     if (!user) {
-        navigate('/login');
+        return <Navigate to={'/login'}/>
     }
 
     const inputSearch = useRef<HTMLInputElement>(null)
     const [sortParam, setSortParam] = useState('id');
     const [sortOrder, setSortOrder] = useState('desc');
     const [searchStr, setSearchStr] = useState('');
+    const [days, setDays] = useState(15);
     const [productsLimit, setProductsLimit] = useState(variables.ORDERS_NUM_INITIAL);
     const { isLoading, data } = useGetManyOrdersQuery(
         {
@@ -30,20 +31,20 @@ function Orders() {
         }
     )
 
-    const downloadReport = (days: number) => {
+    const downloadReport = () => {
         axios({
-            url: variables.API_URL + '/order/getReport?days=' + days,
+            url: variables.API_URL + '/order/getReport?days=' + (days == 0 ? 1 : days),
             method: 'GET',
             responseType: 'blob',
             headers: {
-                "Authorization": "Bearer "+variables.GET_ACCESS_TOKEN()
+                "Authorization": "Bearer " + variables.GET_ACCESS_TOKEN()
             }
         }).then(response => {
             const blob_file: Blob = response.data;
             const file_url = URL.createObjectURL(blob_file);
             const link = document.createElement('a');
             let date = new Date().toLocaleString()
-            link.download = `${date+'-'+days+'-days'}.xlsx`;
+            link.download = `ordersReport${date + '-' + days + '-days'}.xlsx`;
             link.href = file_url;
             link.click();
         });
@@ -195,7 +196,19 @@ function Orders() {
                         </>
                         : <div>Заказы не найдены</div>)
                 }
-                <button onClick={() => downloadReport(5)} className="btn btn-primary align-self-end mt-5">Скачать отчет по заказам</button>
+
+                <div className="mt-5 align-self-end">
+                    <label className="mb-1" htmlFor="inputQuantityLeft">Количество дней</label>
+                    <input type='text'
+                        className="form-control mb-3"
+                        id="inputDays"
+                        value={days}
+                        placeholder="Введите количество дней"
+                        onChange={(e) => setDays(Number(e.target.value.replace(/\D/g, '')))}/>
+                    <button onClick={() => downloadReport()} className="btn btn-primary">
+                        Скачать отчет по заказам
+                    </button>
+                </div>
             </div>
         </div >
     );

@@ -8,21 +8,23 @@ import { useSelector } from "react-redux";
 import AdminMenuUsers from "./AdminMenuUsers";
 import { variables } from "@/variables";
 import AdminMenuButtons from "./AdminMenuButtons";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import './AdminMenu.scss'
+import axios from "axios";
 
 function AdminMenu() {
     const navigate = useNavigate();
     const { user } = useSelector((state: RootState) => state.user);
 
     if (!user) {
-        navigate('/login');
+        return <Navigate to={'/login'}/>
     }
     const [currentUser, setCurrentUser] = useState<IUser>();
     const [modalInfo, setModalInfo] = useState<IModalInfo>({ title: '', children: '' });
     const inputSearch = useRef<HTMLInputElement>(null)
     const [searchStr, setSearchStr] = useState('');
     const [limit, setLimit] = useState(variables.USERS_NUM_INITIAL);
+    const [days, setDays] = useState(15);
     const { data, isLoading } = useGetAllQuery({ limit: limit, contain: searchStr });
 
     const inputID = useRef<HTMLInputElement>(null);
@@ -50,6 +52,25 @@ function AdminMenu() {
             inputPassword.current.value = '';
         }
     }, [currentUser])
+
+    const downloadReport = () => {
+        axios({
+            url: variables.API_URL + '/user/getReport?days=' + (days == 0 ? 1 : days),
+            method: 'GET',
+            responseType: 'blob',
+            headers: {
+                "Authorization": "Bearer " + variables.GET_ACCESS_TOKEN()
+            }
+        }).then(response => {
+            const blob_file: Blob = response.data;
+            const file_url = URL.createObjectURL(blob_file);
+            const link = document.createElement('a');
+            let date = new Date().toLocaleString()
+            link.download = `employeeReport_${date + '-' + days + '-days'}.xlsx`;
+            link.href = file_url;
+            link.click();
+        });
+    }
 
     return (
         <div className="d-flex p-3 flex-fill">
@@ -116,7 +137,7 @@ function AdminMenu() {
                 <h4 className='text-center p-2 mt-4'>
                     Список пользователей
                 </h4>
-                <div className="input-group home-element mb-2 w-75">
+                <div className="input-group mb-2">
                     <input type="text"
                         className="form-control w-50"
                         placeholder="Введите запрос"
@@ -142,12 +163,24 @@ function AdminMenu() {
                         </div> :
                         <>
                             <AdminMenuUsers data={data} setCurrentUser={setCurrentUser} />
-                            
+
                             <div className='btn btn-outline-primary mt-2 border rounded-4 d-flex justify-content-center' onClick={() => setLimit(limit + 5)}>
                                 Показать еще
                             </div>
                         </>
                 }
+                <div className="mt-5 align-self-end">
+                    <label className="mb-1" htmlFor="inputQuantityLeft">Количество дней</label>
+                    <input type='text'
+                        className="form-control mb-3"
+                        id="inputDays"
+                        value={days}
+                        placeholder="Введите количество дней"
+                        onChange={(e) => setDays(Number(e.target.value.replace(/\D/g, '')))} />
+                    <button onClick={() => downloadReport()} className="btn btn-primary">
+                        Скачать отчет по работникам
+                    </button>
+                </div>
                 <Modal id='myInfoModal' title={modalInfo.title}>
                     {modalInfo.children}
                 </Modal>

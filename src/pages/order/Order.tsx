@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { Toast as bootstrapToast } from 'bootstrap';
 import { useActions } from "@/hooks/useActions";
 import { useGetOneOrderQuery } from "@/store/api/orders.api";
 import OrderInfo from "./OrderInfo";
 import './Order.scss'
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 function Order() {
+    const { user } = useSelector((state: RootState) => state.user);
+
+    if (!user) {
+        return <Navigate to={'/login'}/>
+    }
+
     let { id } = useParams();
     const { isLoading, isError, data } = useGetOneOrderQuery(Number(id))
     const { setToastChildren } = useActions();

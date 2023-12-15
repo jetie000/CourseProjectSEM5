@@ -12,12 +12,7 @@ function ProductFields({ fieldsType, fields, setFields, setFieldsType }:
             return field;
         }));
     }
-
-    useEffect(() => {
-        console.log(fields);
-        
-    }, [fields])
-
+    
     const deleteField = (id: number) => {
         setFields(fields.filter((field, index) => index !== id));
         setFieldsType(fieldsType.filter((field, index) => index !== id))
